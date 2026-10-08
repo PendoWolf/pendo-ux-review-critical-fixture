@@ -51,7 +51,7 @@ export default function App() {
                       ★
                     </button>
                     <span data-testid="double-hint" style={{ color: "#e5e5e5", fontSize: 11 }}>
-                      Tip: Double doubles your count
+                      Tip: Double doubles your count!
                     </span>
         <button data-testid="btn-decrement" onClick={() => run("decrement", api.decrement)}>
           Decrement
