@@ -7,9 +7,21 @@ export interface AppState {
   lastAction: string;
 }
 
+// Thrown when the server answers with a non-2xx status. Keeps the status as its
+// own field so callers (e.g. Pendo tracking) don't have to parse the message.
+export class ApiError extends Error {
+  readonly status: number;
+
+  constructor(message: string, status: number) {
+    super(message);
+    this.name = "ApiError";
+    this.status = status;
+  }
+}
+
 async function call(path: string, method: "GET" | "POST"): Promise<AppState> {
   const res = await fetch(`${BASE}${path}`, { method });
-  if (!res.ok) throw new Error(`${method} ${path} failed: ${res.status}`);
+  if (!res.ok) throw new ApiError(`${method} ${path} failed: ${res.status}`, res.status);
   return res.json() as Promise<AppState>;
 }
 
