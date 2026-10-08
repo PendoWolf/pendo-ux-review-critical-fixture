@@ -9,7 +9,10 @@ export interface AppState {
 
 async function call(path: string, method: "GET" | "POST"): Promise<AppState> {
   const res = await fetch(`${BASE}${path}`, { method });
-  if (!res.ok) throw new Error(`${method} ${path} failed: ${res.status}`);
+  if (!res.ok) {
+    // Attach the status so callers can report it without parsing the message.
+    throw Object.assign(new Error(`${method} ${path} failed: ${res.status}`), { status: res.status });
+  }
   return res.json() as Promise<AppState>;
 }
 
